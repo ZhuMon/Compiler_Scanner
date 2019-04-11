@@ -23,8 +23,8 @@ cpp_comment "/""/"({letter}|{digit}|[\40])*
 
 F_CONST {number}"."{digit}+
 b ([\40-\41\43-\133\135-\170])
-d ([\40-\133\135-\170])
-STR_CONST [\42](([\134]+{d}{b}*)|({b}+[\134]+{d}{b}*))[\42]
+any ([\40-\170])
+STR_CONST [\42]({b}|[\134]{any})+[\42]
 
 /* Rules section */
 %%
