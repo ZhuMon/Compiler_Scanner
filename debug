@@ -1,0 +1,17 @@
+./myscanner < input/basic_overall.c > "out"
+diff out output/basic_overall.out
+./myscanner < input/declaration.c > "out"
+diff out output/declaration.out
+./myscanner < input/if_condition.c > "out"
+diff out output/if_condition.out
+./myscanner < input/operators.c > "out"
+diff out output/operators.out
+./myscanner < input/comment.c > "out"
+diff out output/comment.out
+./myscanner < input/function.c > "out"
+diff out output/function.out
+./myscanner < input/loop.c > "out"
+diff out output/loop.out
+./myscanner < input/print.c > "out"
+diff out output/print.out
+
