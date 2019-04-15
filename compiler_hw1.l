@@ -14,16 +14,25 @@ digit [0-9]
 ws [\t\n]+
 id {letter}+({letter}|{digit})*
 number ([1-9]{digit}+)|{digit}+
-a ({ws}|[\40-\51\53-\176])
+
+/* no * */
+a ({ws}|[\40-\51\53-\176]) 
+
+/* no * / */
 c ({ws}|[\40-\51\53-\56\58-\176])
+
+any ([\40-\170])
+
 c_comment "/""*"{a}*("*"+{c}{a}*)*"*"+"/"
 
-cpp_comment "/""/"({letter}|{digit}|[\40])*
+cpp_comment "/""/"{any}*
 
+I_CONST ("="([\40]*([\53]|[\55])[\40]*{number}|{number}))|{number}
+F_CONST (([\53]|[\55])[\40]*{number}"."{digit}+)|({number}"."{digit}+)
 
-F_CONST {number}"."{digit}+
+/* no \ " */
 b ([\40-\41\43-\133\135-\170])
-any ([\40-\170])
+
 STR_CONST [\42]({b}|[\134]{any})+[\42]
 
 /* Rules section */
@@ -87,7 +96,21 @@ STR_CONST [\42]({b}|[\134]{any})+[\42]
 "return"    { printf("%s \t RET\n", yytext); }
 "continue"  { printf("%s \t CONT\n", yytext); }
 "break"     { printf("%s \t BREAK\n", yytext); }
-{number}    { printf("%s \t I_CONST\n", yytext); }
+{I_CONST}   { if(yytext[0] == '='){
+                int b = 1;
+                for(int i = 0;i < yyleng; i++){
+                    if(i >= yyleng-b-1){
+                        yytext[i] = '\0';
+                        break;
+                    }
+                    if(yytext[i+b] == ' ')
+                        b += 1;
+                    yytext[i] = yytext[i+b];
+                }
+              
+                printf("= \t ASGN\n");
+              }
+              printf("%s \t I_CONST\n", yytext); }
 {F_CONST}   { printf("%s \t F_CONST\n", yytext); }
 {STR_CONST} { printf("\" \t QUOTA\n");
                 for(int i = 0; i < yyleng; i++){
