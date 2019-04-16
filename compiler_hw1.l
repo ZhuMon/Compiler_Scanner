@@ -101,7 +101,6 @@ STR_CONST [\42]({b}|[\134]{any})+[\42]
                 for(int i = 0;i < yyleng; i++){
                     if(i >= yyleng-b-1){
                         yytext[i] = '\0';
-                        break;
                     }
                     if(yytext[i+b] == ' ')
                         b += 1;
